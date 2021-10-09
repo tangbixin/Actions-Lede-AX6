@@ -67,6 +67,18 @@ jobs:
         chmod +x $DIY_P1_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
+        
+    - name: Clone OpenClash
+      run: |
+        cd openwrt/package
+        git clone --depth=1 https://github.com/vernesong/OpenClash.git luci-app-openclash
+        cd luci-app-openclash
+        git config core.sparsecheckout true
+        echo "luci-app-openclash" >> .git/info/sparse-checkout
+        pushd luci-app-openclash/tools/po2lmo
+        make
+        sudo make install
+        popd
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
